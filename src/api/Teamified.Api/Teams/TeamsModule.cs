@@ -1,4 +1,6 @@
 ﻿using Teamified.Api.Teams.Endpoints;
+using Teamified.Api.Teams.Infrastructure;
+using Teamified.Api.Teams.Interfaces;
 using Teamified.Api.Teams.Models;
 
 namespace Teamified.Api.Teams
@@ -6,7 +8,9 @@ namespace Teamified.Api.Teams
     public static class TeamsModule
     {
         public static IServiceCollection RegisterTeamsModule(this IServiceCollection services)
-        {            
+        {
+            services.AddScoped<ITeamsService, TeamsService>();
+
             return services;
         }
 
