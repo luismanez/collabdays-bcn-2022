@@ -6,6 +6,6 @@ namespace Teamified.Api.Teams.Interfaces
     {
         Task<IEnumerable<Team>> ListTeams();
         Task<Team> GetTeamByGroupId(Guid groupId);
-        Task ProvisionTeam(Team team);
+        Task<string> ProvisionTeam(Team team);
     }
 }

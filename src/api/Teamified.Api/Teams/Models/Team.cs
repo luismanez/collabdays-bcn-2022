@@ -1,4 +1,6 @@
-﻿namespace Teamified.Api.Teams.Models;
+﻿using Microsoft.Graph;
+
+namespace Teamified.Api.Teams.Models;
 
 public sealed class Team
 {
@@ -19,36 +21,26 @@ public sealed class Team
         Members = new List<IdentityPrincipal>();
         Channels = new List<Channel>();
     }
-}
 
-public sealed class Channel
-{
-    public string Id { get; set; }
-    public string DisplayName { get; set; }
-    public string Description { get; set; }
-    public DateTime CreatedDateTime { get; set; }
-
-    public Channel()
+    public static Team MapFromGraphGroup(Group graphGroup)
     {
-        Id = "unknown";
-        DisplayName = "unknown";
-        Description = "unknown";
+        return new Team
+        {
+            Id = graphGroup.Id,
+            Description = graphGroup.Description,
+            DisplayName = graphGroup.DisplayName,
+            Members = graphGroup.Members != null ? graphGroup.Members.Select(m => IdentityPrincipal.MapFromDirectoryObject(m)) : null,
+            Owners = graphGroup.Owners != null ? graphGroup.Owners.Select(o => IdentityPrincipal.MapFromDirectoryObject(o)) : null
+        };
     }
-}
 
-public sealed class IdentityPrincipal
-{
-    public Guid Id { get; set; }
-    public string UserPrincipalName { get; set; }
-    public string Email { get; set; }
-    public string DisplayName { get; set; }
-    public string JobTitle { get; set; }
-
-    public IdentityPrincipal()
+    internal void AddOwners(IList<DirectoryObject> owners)
     {
-        UserPrincipalName = "unknown";
-        Email = "unknown";
-        DisplayName = "unknown";
-        JobTitle = "unknown";
+        Owners = owners.Select(o => IdentityPrincipal.MapFromDirectoryObject(o));
+    }
+
+    internal void AddChannels(IList<Microsoft.Graph.Channel> channels)
+    {
+        Channels = channels.Select(c => Channel.MapFromGraphChannel(c));
     }
 }

@@ -20,6 +20,14 @@ namespace Teamified.Api.Teams
                 .Produces<IEnumerable<Team>>(200)
                 .WithName("ListTeams");
 
+            endpoints.MapGet("/teams/{id:guid}", GetTeam.Handle)
+                .Produces<Team>(200)
+                .WithName("GetTeam");
+
+            endpoints.MapPost("/teams", ProvisionTeam.Handle)
+                .Produces<string>(202)
+                .WithName("ProvisionTeam");
+
             return endpoints;
         }
     }

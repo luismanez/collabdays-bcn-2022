@@ -18,7 +18,9 @@ public class ListTeamsQueryHandler : IRequestHandler<ListTeamsQuery, IEnumerable
         _teamsService = teamsService;
     }
 
-    public async Task<IEnumerable<Team>> Handle(ListTeamsQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Team>> Handle(
+        ListTeamsQuery request, 
+        CancellationToken cancellationToken)
     {
         return await _teamsService.ListTeams();
     }
