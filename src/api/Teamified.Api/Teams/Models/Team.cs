@@ -7,7 +7,6 @@ public sealed class Team
     public string Id { get; set; }
     public string DisplayName { get; set; }
     public string Description { get; set; }
-    public DateTime CreatedDateTime { get; set; }
     public IEnumerable<IdentityPrincipal> Owners { get; set; }
     public IEnumerable<IdentityPrincipal> Members { get; set; }
     public IEnumerable<Channel> Channels { get; set; }

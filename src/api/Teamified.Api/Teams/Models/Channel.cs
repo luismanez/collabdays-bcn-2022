@@ -5,7 +5,6 @@ public sealed class Channel
     public string Id { get; set; }
     public string DisplayName { get; set; }
     public string Description { get; set; }
-    public DateTime CreatedDateTime { get; set; }
 
     public Channel()
     {

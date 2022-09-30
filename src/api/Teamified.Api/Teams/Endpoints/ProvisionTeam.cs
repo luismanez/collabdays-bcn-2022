@@ -5,7 +5,6 @@ namespace Teamified.Api.Teams.Endpoints
 {
     public class ProvisionTeam
     {
-        [Authorize]
         public static async Task<IResult> Handle(
             IMediator mediator, 
             ProvisionTeamCommand command)

@@ -5,7 +5,6 @@ namespace Teamified.Api.Teams.Endpoints;
 
 public static class GetTeam
 {
-    [Authorize]
     public static async Task<IResult> Handle(
         IMediator mediator, Guid id)
     {
