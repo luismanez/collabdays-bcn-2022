@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Kiota.Authentication.Azure;
 using Microsoft.Kiota.Http.HttpClientLibrary;
+using Teamified.BatchTeamsProvisioner.Models;
 using Teamified.Sdk;
 
 namespace Teamified.BatchTeamsProvisioner.HostedServices;
@@ -17,6 +18,46 @@ internal sealed class BatchTeamsProvisioner : IHostedService
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
+    {
+        var teamifiedServiceClient = GetTeamifiedApiClient();
+
+        var teams = await teamifiedServiceClient.Teams.GetAsync(
+            cancellationToken: cancellationToken);
+
+        var bulkTeamsToProvision = GenerateBulkData();
+
+        foreach (var teamToProvision in bulkTeamsToProvision)
+        {
+            var alreadyExists = 
+                teams.FirstOrDefault(t => t.DisplayName.Equals(
+                    teamToProvision.DisplayName, 
+                    StringComparison.OrdinalIgnoreCase)) != default;
+
+            Console.Write($"Provisioning Team: {teamToProvision.DisplayName}...");
+            if (!alreadyExists)
+            {
+                await teamifiedServiceClient.Teams.PostAsync(
+                    new Sdk.Models.ProvisionTeamCommand
+                    {
+                        DisplayName = teamToProvision.DisplayName,
+                        Description = teamToProvision.Description,
+                    }, 
+                    cancellationToken: cancellationToken);
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Done!");
+                Console.ResetColor();
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine("Already existed.");
+                Console.ResetColor();
+            }
+        }
+    }
+
+    private TeamifiedApiClient GetTeamifiedApiClient()
     {
         var clientId = _configuration.GetValue<string>("ClientId");
         var tenantId = _configuration.GetValue<string>("TenantId");
@@ -38,13 +79,19 @@ internal sealed class BatchTeamsProvisioner : IHostedService
         var requestAdapter = new HttpClientRequestAdapter(authProvider);
 
         var teamifiedServiceClient = new TeamifiedApiClient(requestAdapter);
+        return teamifiedServiceClient;
+    }
 
-        var teams = await teamifiedServiceClient.Teams.GetAsync(cancellationToken: cancellationToken);
+    private static IEnumerable<TeamProvisionItem> GenerateBulkData()
+    {
+        var bulkData = new List<TeamProvisionItem> 
+        { 
+            new TeamProvisionItem("TeamifiedBulk 1", "Testing teamified SDK"),
+            new TeamProvisionItem("Gotham", "Testing teamified SDK"),
+            new TeamProvisionItem("TeamifiedBulk 3", "Testing teamified SDK")
+        };
 
-        foreach (var team in teams)
-        {
-            Console.WriteLine(team.DisplayName);
-        }
+        return bulkData;
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
