@@ -2,8 +2,8 @@
 Here you can find the materials for my session "Crea un SDK para cualquier API en minutos con Kiota" (spanish), delivered during CollabDays Barcelona 2022 (22nd October).
 
 ## Session summary (spanish)
-En esta sesión te enseñaré qué es Kiota, la nueva herramienta OpenSource creada por Microsoft, que te permitirá crear un SDK en casi cualquier lenguaje (C#, Java, Typescript, PHP, Ruby, Go) 
-para cualquier API descrita con OpenAPI. Veremos como utilizarlo para crearte tu propio “subset” SDK de MS Graph, así como de tu propia custom API.
+En esta sesiï¿½n te enseï¿½arï¿½ quï¿½ es Kiota, la nueva herramienta OpenSource creada por Microsoft, que te permitirï¿½ crear un SDK en casi cualquier lenguaje (C#, Java, Typescript, PHP, Ruby, Go) 
+para cualquier API descrita con OpenAPI. Veremos como utilizarlo para crearte tu propio ï¿½subsetï¿½ SDK de MS Graph, asï¿½ como de tu propia custom API.
 
 ## Teamified API
 This is the API used to generate the SDK using Kiota. This is small wrapper around MS Graph Teams endpoint. It allows the users:
@@ -32,13 +32,13 @@ See here for more information: [https://microsoft.github.io/kiota/get-started/](
 In a nutshell:
  - Install the .net tool:
  ```
-	dotnet tool install --global --prerelease Microsoft.OpenApi.Kiota
+dotnet tool install --global --prerelease Microsoft.OpenApi.Kiota
 ```
  - Run the API project and navigate to the swagger url: https://localhost:7295/swagger/v1/swagger.json
  - Save the json file to your local disk (_c:/temp/TeamifiedOpenApiDescription.json_)
 - Run the command:
 ```
-	kiota --openapi TeamifiedOpenApiDescription.json --language csharp --class-name TeamifiedApiClient --namespace-name Teamified.Sdk --output ./TeamifiedClient --log-level debug
+kiota --openapi TeamifiedOpenApiDescription.json --language csharp --class-name TeamifiedApiClient --namespace-name Teamified.Sdk --output ./TeamifiedClient --log-level debug
 ```
 
 Now you can add the generated files to your project, and use the generated client. In the demo source code, the generated files are in the project: __Teamified.Sdk__, and the client is being used in the
