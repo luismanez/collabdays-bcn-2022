@@ -9,10 +9,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(
-    c => c.AddServer(new OpenApiServer() // Required by Kiota when creating the SDK
+    c =>
     {
-        Url = "https://localhost:7295"
-    }));
+        c.AddServer(new OpenApiServer() // Required by Kiota when creating the SDK
+        {
+            Url = "https://localhost:7295"
+        });
+        c.AddServer(new OpenApiServer()
+        {
+            Url = "https://teamifiedapi.azurewebsites.net"
+        });
+    });
 
 builder.Services.AddMediatR(m => m.AsScoped(), typeof(Program));
 
@@ -30,6 +37,18 @@ builder.Services.AddAuthorization(cfg => {
 
 builder.Services.AddHttpContextAccessor();
 
+const string MyAllowSpecificOrigins = "_teamifiedOpenCors";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy
+                            .AllowAnyOrigin()
+                            .AllowAnyHeader();
+                      });
+});
+
 builder.Services.RegisterTeamsModule();
 
 var app = builder.Build();
@@ -42,6 +61,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthentication();
 app.UseAuthorization();
