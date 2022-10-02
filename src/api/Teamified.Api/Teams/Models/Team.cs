@@ -28,8 +28,8 @@ public sealed class Team
             Id = graphGroup.Id,
             Description = graphGroup.Description,
             DisplayName = graphGroup.DisplayName,
-            Members = graphGroup.Members != null ? graphGroup.Members.Select(m => IdentityPrincipal.MapFromDirectoryObject(m)) : null,
-            Owners = graphGroup.Owners != null ? graphGroup.Owners.Select(o => IdentityPrincipal.MapFromDirectoryObject(o)) : null
+            Members = graphGroup.Members != null ? graphGroup.Members.Select(m => IdentityPrincipal.MapFromDirectoryObject(m)) : new List<IdentityPrincipal>(),
+            Owners = graphGroup.Owners != null ? graphGroup.Owners.Select(o => IdentityPrincipal.MapFromDirectoryObject(o)) : new List<IdentityPrincipal>()
         };
     }
 
