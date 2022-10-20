@@ -30,7 +30,6 @@ export default class TeamsListWebPart extends BaseClientSideWebPart<ITeamsListWe
         environmentMessage: this._environmentMessage,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
         userDisplayName: this.context.pageContext.user.displayName,
-        aadHttpClientFactory: this.context.aadHttpClientFactory,
         aadTokenProviderFactory: this.context.aadTokenProviderFactory
       }
     );

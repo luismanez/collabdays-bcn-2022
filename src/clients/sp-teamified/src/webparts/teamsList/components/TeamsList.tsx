@@ -6,10 +6,11 @@ import { escape } from '@microsoft/sp-lodash-subset';
 import { AadTokenProvider } from '@microsoft/sp-http';
 import { FetchRequestAdapter } from '@microsoft/kiota-http-fetchlibrary';
 import { TeamifiedApiClient } from '../client/teamifiedApiClient';
-import { AadTokenAuthenticationProvider } from '../auth/AadTokenAuthenticationProvider';
-
+import { SpfxAadAuthenticationProvider } from "../auth/SpfxAadAuthenticationProvider";
 
 export default class TeamsList extends React.Component<ITeamsListProps, ITeamsListState> {
+
+  private readonly azureAdApplicationIdUri: string = "YOUR_AAD_APP_ID_URI!!!!!!";
 
   constructor(props: ITeamsListProps) {
     super(props);    
@@ -21,11 +22,17 @@ export default class TeamsList extends React.Component<ITeamsListProps, ITeamsLi
   public componentDidMount(): void {
     this.props.aadTokenProviderFactory.getTokenProvider()
       .then((tokenProvider: AadTokenProvider): void => {
+
         const authProvider =
-          new AadTokenAuthenticationProvider(tokenProvider);
+          new SpfxAadAuthenticationProvider(
+            tokenProvider, 
+            this.azureAdApplicationIdUri);
+        
         const adapter = new FetchRequestAdapter(authProvider);
         adapter.baseUrl = "https://teamifiedapi.azurewebsites.net"; // or will use the URL defined in the OpenAPI Servers section
+        
         const teamifiedClient = new TeamifiedApiClient(adapter);
+
         teamifiedClient.teams.get().then(teams => {
           console.log(teams);
           this.setState({

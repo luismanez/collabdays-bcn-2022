@@ -1,4 +1,4 @@
-import { AadHttpClientFactory, AadTokenProviderFactory } from '@microsoft/sp-http';
+import { AadTokenProviderFactory } from '@microsoft/sp-http';
 
 export interface ITeamsListProps {
   description: string;
@@ -6,6 +6,5 @@ export interface ITeamsListProps {
   environmentMessage: string;
   hasTeamsContext: boolean;
   userDisplayName: string;
-  aadHttpClientFactory: AadHttpClientFactory;
   aadTokenProviderFactory: AadTokenProviderFactory;
 }
